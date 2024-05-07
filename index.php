@@ -14,28 +14,31 @@ $email = $_POST['email'] ?? '';
 
 function controlEmail($email){
 
-
     //CONTROLLO CHE SE $email è strettamente uguale a null
         //all'apertura della pagina trovo scritto un messaggio di avviso
-    if($email === ''){
+    // if($email === ''){
 
-        echo '<div class="alert alert-dark w-25" role="alert"> Nessuna Email Inserita </div>';
+    //     echo '<div class="alert alert-dark w-25" role="alert"> Nessuna Email Inserita </div>';
 
-    } else {
+    // } else {
+
         //SE $email contiene '@' && '.'
-            //ALLORA: stampa un messaggio di successo
+            //ALLORA: ritorna TRUE [stampa un messaggio di successo]
         //ALTRIMENTI:
-            //stampa un messaggio di avviso
+            //ritorna FALSE [stampa un messaggio di avviso]
         if(str_contains($email, '@') && str_contains($email, '.')){
     
-            echo '<div class="alert alert-success w-25" role="alert"> L\'email è stata inserita con successo. </div>'; //utilizzo le graffe {} per includere nel messaggio il valore inserito dall'utente, passato alla funzione come parametro
-    
+            // echo "<div class=\"alert alert-success w-25\" role=\"alert\"> L\'email $email è stata inserita con successo. </div>";
+            
+            return true;
+
         } else {
     
-            echo '<div class="alert alert-warning w-25" role="alert"> L\'email deve includere . e @. Si prega di riprovare. </div>';
-    
+            // echo '<div class="alert alert-warning w-25" role="alert"> L\'email deve includere . e @. Si prega di riprovare. </div>';
+            
+            return false;
         }
-    }
+    // }
     
 }
 
@@ -64,8 +67,30 @@ function controlEmail($email){
         </form>
 
         <div class="d-flex justify-content-center">
-            <!-- stampo in pagina il messaggio di avviso della funzione di controllo, passandogli come parametro il valore inserito dall'utente  -->
-            <?= controlEmail($email)?>
+
+            <!-- SE L'INPUT E' VUOTO STAMPA L'ALERT "Nessuna Email Inserita"  -->
+            <?php if($email === '') { ?>
+                <div class="alert alert-dark w-25" role="alert"> Nessuna Email Inserita </div>
+
+            <!-- DOPO L'INSERIMENTO DELL'EMAIL, SE LA FUNZIONE CHE HA COME PARAMETRO IL VALORE DELL'INPUT E' TRUE 
+                 ALLORA STAMPA L'ALERT: "L'email <?= $email; ?> è stata inserita con successo!" -->
+
+            <?php } elseif (controlEmail($email) === true) { ?>
+                <div class="alert alert-success w-25" role="alert"> L'email <?= $email; ?> è stata inserita con successo! </div>
+
+            <!-- ALTRIMENTI, AVENDO LA FUNZIONE CHE HA COME PARAMETRO IL VALORE DELL'INPUT FALSE 
+                 ALLORA STAMPA L'ALERT: "L'email deve includere . e @. Si prega di riprovare!" -->
+                 
+            <?php } else { ?>
+                <div class="alert alert-warning w-25" role="alert">
+                    <p>
+                        L'email deve includere . e @. 
+                    </p>
+                    <p>
+                        Si prega di riprovare!
+                    </p>
+                </div>
+            <?php } ?>
         </div>
     </body>
 </html>
